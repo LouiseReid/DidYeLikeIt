@@ -48,7 +48,7 @@ class DBHelper {
         "$columnDescription TEXT, "
         "$columnRating INTEGER, "
         "$columnDate TEXT, "
-        "$columnBuyAgain BOOLEAN)");
+        "$columnBuyAgain TEXT)");
   }
 
   Future<int> save(Item item) async {

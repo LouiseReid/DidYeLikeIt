@@ -7,7 +7,7 @@ class Item extends StatelessWidget {
   String _description;
   int _rating;
   String _date;
-  bool _buyAgain;
+  String _buyAgain;
   int _id;
 
   Item(this._eatery, this._supplier, this._description, this._rating, this._date, this._buyAgain);
@@ -17,8 +17,9 @@ class Item extends StatelessWidget {
   String get description => description;
   int get rating => _rating;
   String get date => _date;
-  bool get buyAgain => _buyAgain;
+  String get buyAgain => _buyAgain;
   int get id => _id;
+
 
   Item.fromMap(dynamic obj){
     this._eatery = obj['eatery'];
