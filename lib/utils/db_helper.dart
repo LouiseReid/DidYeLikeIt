@@ -14,6 +14,7 @@ class DBHelper {
   final String columnId = "id";
   final String columnEatery = "eatery";
   final String columnSupplier = "supplier";
+  final String columnDescription = "description";
   final String columnRating = "rating";
   final String columnDate = "date";
   final String columnBuyAgain = "buyAgain";
@@ -44,8 +45,9 @@ class DBHelper {
         "$columnId INTEGER PRIMARY KEY, "
         "$columnEatery TEXT, "
         "$columnSupplier TEXT, "
-        "$columnRating INTEGER"
-        "$columnDate TEXT"
+        "$columnDescription TEXT, "
+        "$columnRating INTEGER, "
+        "$columnDate TEXT, "
         "$columnBuyAgain BOOLEAN)");
   }
 
