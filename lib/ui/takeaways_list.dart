@@ -13,7 +13,7 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   final TextEditingController _eateryController = new TextEditingController();
   final TextEditingController _supplierController = new TextEditingController();
   final TextEditingController _descriptionController =
-  new TextEditingController();
+      new TextEditingController();
   final TextEditingController _ratingController = new TextEditingController();
   final TextEditingController _buyAgainController = new TextEditingController();
 
@@ -40,7 +40,31 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[900],
-      body: Column(),
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            child: ListView.builder(
+                itemCount: _items.length,
+                itemBuilder: (_, int index) {
+                  return Card(
+                    color: Colors.white70,
+                    child: ListTile(
+                      title: _items[index],
+                    ),
+                  );
+                }),
+          ),
+          Divider(height: 1.2)
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add TakeAway',
+          backgroundColor: Colors.blueGrey,
+          child: ListTile(
+            title: Icon(Icons.add),
+          ),
+          onPressed: _showFormDialog
+      ),
     );
   }
 
@@ -61,7 +85,7 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
             controller: _eateryController,
             autofocus: true,
             decoration:
-            InputDecoration(labelText: 'Eatery', hintText: 'eg Pizza Hut'),
+                InputDecoration(labelText: 'Eatery', hintText: 'eg Pizza Hut'),
           ),
           TextField(
             controller: _supplierController,
@@ -80,7 +104,7 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
           TextField(
             controller: _buyAgainController,
             decoration:
-            InputDecoration(labelText: 'Buy Again?', hintText: 'eg yes'),
+                InputDecoration(labelText: 'Buy Again?', hintText: 'eg yes'),
           )
         ],
       ),
@@ -103,10 +127,10 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
         )
       ],
     );
-    showDialog(context: context,
+    showDialog(
+        context: context,
         builder: (_) {
           return alert;
-        }
-    );
+        });
   }
 }
