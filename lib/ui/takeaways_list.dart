@@ -15,7 +15,6 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   final TextEditingController _descriptionController =
       new TextEditingController();
   final TextEditingController _ratingController = new TextEditingController();
-  final TextEditingController _buyAgainController = new TextEditingController();
 
   @override
   void initState() {
@@ -24,9 +23,8 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   }
 
   void _handleSubmit(String eatery, String supplier, String description,
-      int rating, String buyAgain) async {
-    Item item = new Item(eatery, supplier, description, rating,
-        DateTime.now().toIso8601String(), buyAgain);
+      int rating) async {
+    Item item = new Item(eatery, supplier, description, rating);
     int savedItemId = await db.save(item);
 
     Item addedItem = await db.getById(savedItemId);
@@ -101,11 +99,6 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
             controller: _ratingController,
             decoration: InputDecoration(labelText: 'Rating', hintText: 'eg 5'),
           ),
-          TextField(
-            controller: _buyAgainController,
-            decoration:
-                InputDecoration(labelText: 'Buy Again?', hintText: 'eg yes'),
-          )
         ],
       ),
       actions: <Widget>[
@@ -115,9 +108,8 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
                 _eateryController.text,
                 _supplierController.text,
                 _descriptionController.text,
-                int.parse(_ratingController.text),
-                _buyAgainController.text);
-            Navigator.pop(context);
+                int.parse(_ratingController.text));
+                Navigator.pop(context);
           },
           child: Text('Save'),
         ),

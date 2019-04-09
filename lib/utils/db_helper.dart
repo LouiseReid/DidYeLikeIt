@@ -16,8 +16,6 @@ class DBHelper {
   final String columnSupplier = "supplier";
   final String columnDescription = "description";
   final String columnRating = "rating";
-  final String columnDate = "date";
-  final String columnBuyAgain = "buyAgain";
 
   static Database _db;
 
@@ -35,7 +33,7 @@ class DBHelper {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, "didyelikeit.db");
 
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    var db = await openDatabase(path, version: 3, onCreate: _onCreate);
 
     return db;
   }
@@ -46,9 +44,7 @@ class DBHelper {
         "$columnEatery TEXT, "
         "$columnSupplier TEXT, "
         "$columnDescription TEXT, "
-        "$columnRating INTEGER, "
-        "$columnDate TEXT, "
-        "$columnBuyAgain TEXT)");
+        "$columnRating INTEGER)");
   }
 
   Future<int> save(Item item) async {
