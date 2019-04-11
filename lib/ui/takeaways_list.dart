@@ -12,11 +12,12 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   final List<Item> _items = <Item>[];
   final TextEditingController _eateryController = new TextEditingController();
   final TextEditingController _supplierController = new TextEditingController();
-  final TextEditingController _descriptionController = new TextEditingController();
+  final TextEditingController _descriptionController =
+      new TextEditingController();
   final TextEditingController _ratingController = new TextEditingController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _getTakeAways();
     _ratingController.addListener(_validate);
@@ -73,48 +74,62 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
     });
   }
 
-   _showFormDialog() {
+  _showFormDialog() {
     showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
+            backgroundColor: Colors.blueGrey[900],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(25.0),
+              ),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(
                   controller: _eateryController,
                   autofocus: true,
-                  decoration:
-                  InputDecoration(labelText: 'Eatery', hintText: 'eg Pizza Hut'),
+                  style: _textStyle(),
+                  decoration: _inputDecoration('Eatery', "Toni's Pizziera"),
                 ),
                 TextField(
-                  controller: _supplierController,
-                  decoration: InputDecoration(
-                      labelText: 'Supplier', hintText: 'eg Deliveroo'),
-                ),
+                    controller: _supplierController,
+                    style: _textStyle(),
+                    decoration: _inputDecoration('Supplier', 'Deliveroo')),
                 TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                      labelText: 'Description', hintText: 'eg cheese pizza'),
-                ),
+                    controller: _descriptionController,
+                    style: _textStyle(),
+                    decoration:
+                        _inputDecoration('Description', 'cheese pizza')),
                 TextField(
-                  controller: _ratingController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: 'Rating', suffixText: '/5'
-                  ),
-                )
+                    controller: _ratingController,
+                    style: _textStyle(),
+                    keyboardType: TextInputType.number,
+                    decoration: _inputDecoration('Rating', null, '/5'))
               ],
             ),
             actions: <Widget>[
               FlatButton(
+                color: Colors.blueGrey,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 onPressed: () {
-                  _handleSubmit(_eateryController.text, _supplierController.text,
-                      _descriptionController.text, int.parse(_ratingController.text));
+                  _handleSubmit(
+                      _eateryController.text,
+                      _supplierController.text,
+                      _descriptionController.text,
+                      int.parse(_ratingController.text));
                 },
                 child: Text('Save'),
               ),
               FlatButton(
+                color: Colors.blueGrey,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
                 onPressed: () => Navigator.pop(context),
                 child: Text('Cancel'),
               )
@@ -123,13 +138,35 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
         });
   }
 
+  _textStyle() {
+    return TextStyle(
+      color: Colors.white,
+    );
+  }
+
+  _inputDecoration(String label, [String hint, String suffix]) {
+    return InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          color: Colors.white,
+          decorationColor: Colors.white,
+        ),
+        suffixText: suffix,
+        hintText: hint != null ? 'eg $hint' : null,
+        hintStyle: TextStyle(color: Colors.white, fontSize: 12.0),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)));
+  }
+
   void _validate() {
-    if(_ratingController.text.isNotEmpty && int.parse(_ratingController.text) > 5){
+    if (_ratingController.text.isNotEmpty &&
+        int.parse(_ratingController.text) > 5) {
       _ratingController.text = 5.toString();
     }
   }
 
-  void _handleSubmit(String eatery, String supplier, String description, int rating) async {
+  void _handleSubmit(
+      String eatery, String supplier, String description, int rating) async {
     Item item = new Item(eatery, supplier, description, rating);
     int savedItemId = await db.save(item);
 
@@ -142,7 +179,6 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
     Navigator.pop(context);
     _clearTextEditors();
   }
-
 
   void _deleteItem(int id, int index) {
     db.delete(id);
