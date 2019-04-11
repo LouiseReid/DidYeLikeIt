@@ -72,7 +72,7 @@ class Item extends StatelessWidget {
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 6.0, bottom: 8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Row(
               children: _starsForRatings()),
         ),

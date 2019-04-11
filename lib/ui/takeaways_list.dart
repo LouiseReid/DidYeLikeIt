@@ -14,7 +14,7 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   final TextEditingController _supplierController = new TextEditingController();
   final TextEditingController _descriptionController =
       new TextEditingController();
-  final TextEditingController _ratingController = new TextEditingController();
+  int _ratingController;
 
   @override
   void initState() {
@@ -22,8 +22,8 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
     _getTakeAways();
   }
 
-  void _handleSubmit(String eatery, String supplier, String description,
-      int rating) async {
+  void _handleSubmit(
+      String eatery, String supplier, String description, int rating) async {
     Item item = new Item(eatery, supplier, description, rating);
     int savedItemId = await db.save(item);
 
@@ -48,6 +48,17 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
                     color: Colors.white70,
                     child: ListTile(
                       title: _items[index],
+                      trailing: Column(
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.remove_circle_outline, color: Colors.redAccent[200]),
+                            iconSize: 25.0,
+                            onPressed: () {
+                              _deleteItem(_items[index].id, index);
+                            }
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }),
@@ -56,13 +67,12 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Add TakeAway',
+          tooltip: 'Add TakeAway',
           backgroundColor: Colors.blueGrey,
           child: ListTile(
             title: Icon(Icons.add),
           ),
-          onPressed: _showFormDialog
-      ),
+          onPressed: _showFormDialog),
     );
   }
 
@@ -78,6 +88,7 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   void _showFormDialog() {
     var alert = AlertDialog(
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextField(
             controller: _eateryController,
@@ -95,21 +106,14 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
             decoration: InputDecoration(
                 labelText: 'Description', hintText: 'eg cheese pizza'),
           ),
-          TextField(
-            controller: _ratingController,
-            decoration: InputDecoration(labelText: 'Rating', hintText: 'eg 5'),
-          ),
         ],
       ),
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            _handleSubmit(
-                _eateryController.text,
-                _supplierController.text,
-                _descriptionController.text,
-                int.parse(_ratingController.text));
-                Navigator.pop(context);
+            _handleSubmit(_eateryController.text, _supplierController.text,
+                _descriptionController.text, _ratingController);
+            Navigator.pop(context);
           },
           child: Text('Save'),
         ),
@@ -119,10 +123,18 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
         )
       ],
     );
+
     showDialog(
         context: context,
         builder: (_) {
           return alert;
         });
+  }
+
+  void _deleteItem(int id, int index) {
+    db.delete(id);
+    setState(() {
+      _items.removeAt(index);
+    });
   }
 }
