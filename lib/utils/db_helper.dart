@@ -33,7 +33,7 @@ class DBHelper {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, "didyelikeit.db");
 
-    var db = await openDatabase(path, version: 3, onCreate: _onCreate);
+    var db = await openDatabase(path, version: 4, onCreate: _onCreate);
 
     return db;
   }

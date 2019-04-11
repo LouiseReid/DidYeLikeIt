@@ -12,26 +12,14 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
   final List<Item> _items = <Item>[];
   final TextEditingController _eateryController = new TextEditingController();
   final TextEditingController _supplierController = new TextEditingController();
-  final TextEditingController _descriptionController =
-      new TextEditingController();
-  int _ratingController;
+  final TextEditingController _descriptionController = new TextEditingController();
+  final TextEditingController _ratingController = new TextEditingController();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _getTakeAways();
-  }
-
-  void _handleSubmit(
-      String eatery, String supplier, String description, int rating) async {
-    Item item = new Item(eatery, supplier, description, rating);
-    int savedItemId = await db.save(item);
-
-    Item addedItem = await db.getById(savedItemId);
-
-    setState(() {
-      _items.insert(0, addedItem);
-    });
+    _ratingController.addListener(_validate);
   }
 
   @override
@@ -51,12 +39,12 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
                       trailing: Column(
                         children: <Widget>[
                           IconButton(
-                            icon: Icon(Icons.remove_circle_outline, color: Colors.redAccent[200]),
-                            iconSize: 25.0,
-                            onPressed: () {
-                              _deleteItem(_items[index].id, index);
-                            }
-                          )
+                              icon: Icon(Icons.remove_circle_outline,
+                                  color: Colors.redAccent[200]),
+                              iconSize: 25.0,
+                              onPressed: () {
+                                _deleteItem(_items[index].id, index);
+                              })
                         ],
                       ),
                     ),
@@ -85,56 +73,88 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
     });
   }
 
-  void _showFormDialog() {
-    var alert = AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          TextField(
-            controller: _eateryController,
-            autofocus: true,
-            decoration:
-                InputDecoration(labelText: 'Eatery', hintText: 'eg Pizza Hut'),
-          ),
-          TextField(
-            controller: _supplierController,
-            decoration: InputDecoration(
-                labelText: 'Supplier', hintText: 'eg Deliveroo'),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-                labelText: 'Description', hintText: 'eg cheese pizza'),
-          ),
-        ],
-      ),
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () {
-            _handleSubmit(_eateryController.text, _supplierController.text,
-                _descriptionController.text, _ratingController);
-            Navigator.pop(context);
-          },
-          child: Text('Save'),
-        ),
-        FlatButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
-        )
-      ],
-    );
-
+   _showFormDialog() {
     showDialog(
         context: context,
         builder: (_) {
-          return alert;
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  controller: _eateryController,
+                  autofocus: true,
+                  decoration:
+                  InputDecoration(labelText: 'Eatery', hintText: 'eg Pizza Hut'),
+                ),
+                TextField(
+                  controller: _supplierController,
+                  decoration: InputDecoration(
+                      labelText: 'Supplier', hintText: 'eg Deliveroo'),
+                ),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                      labelText: 'Description', hintText: 'eg cheese pizza'),
+                ),
+                TextField(
+                  controller: _ratingController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      labelText: 'Rating', suffixText: '/5'
+                  ),
+                )
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  _handleSubmit(_eateryController.text, _supplierController.text,
+                      _descriptionController.text, int.parse(_ratingController.text));
+                },
+                child: Text('Save'),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              )
+            ],
+          );
         });
   }
+
+  void _validate() {
+    if(_ratingController.text.isNotEmpty && int.parse(_ratingController.text) > 5){
+      _ratingController.text = 5.toString();
+    }
+  }
+
+  void _handleSubmit(String eatery, String supplier, String description, int rating) async {
+    Item item = new Item(eatery, supplier, description, rating);
+    int savedItemId = await db.save(item);
+
+    Item addedItem = await db.getById(savedItemId);
+
+    setState(() {
+      _items.add(addedItem);
+    });
+
+    Navigator.pop(context);
+    _clearTextEditors();
+  }
+
 
   void _deleteItem(int id, int index) {
     db.delete(id);
     setState(() {
       _items.removeAt(index);
     });
+  }
+
+  void _clearTextEditors() {
+    _ratingController.clear();
+    _descriptionController.clear();
+    _supplierController.clear();
+    _eateryController.clear();
   }
 }
