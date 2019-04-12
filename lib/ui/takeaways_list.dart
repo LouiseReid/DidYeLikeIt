@@ -35,14 +35,19 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
                 itemBuilder: (_, int index) {
                   return Card(
                     color: Colors.white70,
-                    child: ListTile(
-                      title: _items[index],
-                      trailing: Column(
+                    child: Container(
+                      padding: new EdgeInsets.symmetric(
+                          vertical: 5.0, horizontal: 10.0),
+                      margin: EdgeInsets.symmetric(vertical: 6.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
+                          _items[index],
                           IconButton(
                               icon: Icon(Icons.remove_circle_outline,
-                                  color: Colors.redAccent[200]),
-                              iconSize: 25.0,
+                                  color: Colors.redAccent[400]),
+                              iconSize: 23.5,
                               onPressed: () {
                                 _deleteItem(_items[index].id, index);
                               })
@@ -78,62 +83,68 @@ class _TakeAwaysListState extends State<TakeAwaysList> {
     showDialog(
         context: context,
         builder: (_) {
-          return AlertDialog(
-            backgroundColor: Colors.blueGrey[900],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(25.0),
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TextField(
-                  controller: _eateryController,
-                  autofocus: true,
-                  style: _textStyle(),
-                  decoration: _inputDecoration('Eatery', "Toni's Pizziera"),
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: AlertDialog(
+              backgroundColor: Colors.blueGrey[900],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
                 ),
-                TextField(
-                    controller: _supplierController,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: _eateryController,
+                    autofocus: true,
                     style: _textStyle(),
-                    decoration: _inputDecoration('Supplier', 'Deliveroo')),
-                TextField(
-                    controller: _descriptionController,
-                    style: _textStyle(),
-                    decoration:
-                        _inputDecoration('Description', 'cheese pizza')),
-                TextField(
-                    controller: _ratingController,
-                    style: _textStyle(),
-                    keyboardType: TextInputType.number,
-                    decoration: _inputDecoration('Rating', null, '/5'))
+                    decoration: _inputDecoration('Eatery', "Toni's Pizziera"),
+                  ),
+                  TextField(
+                      controller: _supplierController,
+                      style: _textStyle(),
+                      decoration: _inputDecoration('Supplier', 'Deliveroo')),
+                  TextField(
+                      controller: _descriptionController,
+                      style: _textStyle(),
+                      decoration:
+                          _inputDecoration('Description', 'cheese pizza')),
+                  TextField(
+                      controller: _ratingController,
+                      style: _textStyle(),
+                      keyboardType: TextInputType.number,
+                      decoration: _inputDecoration('Rating', null, '/5'))
+                ],
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  color: Colors.blueGrey,
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  onPressed: () {
+                    _handleSubmit(
+                        _eateryController.text,
+                        _supplierController.text,
+                        _descriptionController.text,
+                        int.parse(_ratingController.text));
+                  },
+                  child: Text('Save'),
+                ),
+                FlatButton(
+                  color: Colors.blueGrey,
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _clearTextEditors();
+                  },
+                  child: Text('Cancel'),
+                )
               ],
             ),
-            actions: <Widget>[
-              FlatButton(
-                color: Colors.blueGrey,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                onPressed: () {
-                  _handleSubmit(
-                      _eateryController.text,
-                      _supplierController.text,
-                      _descriptionController.text,
-                      int.parse(_ratingController.text));
-                },
-                child: Text('Save'),
-              ),
-              FlatButton(
-                color: Colors.blueGrey,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
-              )
-            ],
           );
         });
   }

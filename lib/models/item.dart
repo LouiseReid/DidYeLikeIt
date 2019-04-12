@@ -41,43 +41,43 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: 295.0,
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                capitalize(_eatery),
-                style: TextStyle(
-                    color: Colors.blueGrey[700],
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.5),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 12.0, right: 8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    capitalize(_eatery),
+                    style: TextStyle(
+                        color: Colors.blueGrey[700],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.5),
+                  ),
+                  Text(
+                    capitalize(_supplier),
+                    style: TextStyle(
+                        color: Colors.blueGrey[700],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.5),
+                  )
+                ],
               ),
-              Text(
-                capitalize(_supplier),
-                style: TextStyle(
-                    color: Colors.blueGrey[700],
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.5),
-              )
-            ],
-          ),
-        ),
-        Text(
-          capitalize(_description),
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-          child: Row(
-              children: _starsForRatings()),
-        ),
-      ],
-    ));
+            ),
+            Text(
+              capitalize(_description),
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: Row(children: _starsForRatings()),
+            ),
+          ],
+        ));
   }
 
   List<Icon> _starsForRatings() {
@@ -87,5 +87,4 @@ class Item extends StatelessWidget {
     }
     return stars;
   }
-
 }
